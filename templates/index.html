@@ -1,1 +1,50 @@
 
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Laptop Lottery</title>
+</head>
+<body>
+  <h1>Laptop Lottery System</h1>
+
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <ul class="flashes">
+        {% for msg in messages %}
+          <li>{{ msg }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+
+  <form method="post" enctype="multipart/form-data">
+    <div>
+      <label>Upload Laptop Serials File:</label>
+      <input type="file" name="laptops" accept=".txt,.csv" required>
+    </div>
+    <div>
+      <label>Upload Usernames File:</label>
+      <input type="file" name="users" accept=".txt,.csv" required>
+    </div>
+    <button type="submit">Run Lottery</button>
+  </form>
+
+  {% if winners %}
+    <h2>Winners ({{ winners|length }})</h2>
+    <table border="1" cellpadding="5">
+      <tr><th>Laptop Serial</th><th>Username</th></tr>
+      {% for lap, usr in winners %}
+        <tr><td>{{ lap }}</td><td>{{ usr }}</td></tr>
+      {% endfor %}
+    </table>
+
+    <p>Download results:</p>
+    <ul>
+      <li><a href="{{ url_for('download', filetype='csv', ts=ts) }}">CSV</a></li>
+      <li><a href="{{ url_for('download', filetype='xlsx', ts=ts) }}">Excel</a></li>
+    </ul>
+  {% endif %}
+</body>
+</html>
+
